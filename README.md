@@ -1,5 +1,5 @@
-<img  height="100" src="doc/logo_pagina_ok.png"><br>
-<img height="100" src="doc/unne2023.png"><br>
+<img  height="100" src="doc/logo_pagina_ok.png">
+<img height="100" src="doc/Logo-UNNE.png"><br>
 # Bases de Datos I - Proyecto de Estudio
 Mediante este medio actualizaremos y publicaremos acerca del desarrollo del Proyecto de Estudio de la asignatura Bases de Datos I (FaCENA - UNNE)
 
