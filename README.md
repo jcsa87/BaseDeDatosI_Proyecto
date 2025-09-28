@@ -3,14 +3,14 @@ Mediante este medio actualizaremos y publicaremos acerca del desarrollo del Proy
 
 
 # Integrantes
- *Senicen Acosta, Juan Cruz (45.645.707)*
- *Alegre, Leonel Francisco (45.169.283)*
- *Castillo, Geremias Benjamin (45.645.652)*
- *Barberan, Andres Leon (44.826.087)*
+ -*Senicen Acosta, Juan Cruz (45.645.707)*
+ -*Alegre, Leonel Francisco (45.169.283)*
+ -*Castillo, Geremias Benjamin (45.645.652)*
+ -*Barberan, Andres Leon (44.826.087)*
 
 **Estructura del repositorio**
 
     > ## BaseDeDatosI_Proyecto
-    - doc (documentos e información acerca del proyecto)
+    - doc (documentos e informaciÃ³n acerca del proyecto)
 		  Integrador_Grupo34.pdf (Documento del informe del proyecto)
 		 
