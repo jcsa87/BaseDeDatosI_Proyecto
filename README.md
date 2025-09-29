@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="doc/logo_pagina_ok.png" alt="Logo 1" height="100">
+  <img src="doc/logo_facena.png" alt="Logo 1" height="100">
   <img src="doc/Logo-UNNE.png" alt="Logo 2" height="100">
 </p>
 
