@@ -18,6 +18,5 @@ Este espacio propone presentar la información para organizar el desarrollo del 
 
     > ## BaseDeDatosI_Proyecto
     - doc (documentos e información acerca del proyecto)
-		  Integrador_Grupo34.pdf (Documento del informe del proyecto)
+		  Integrador_Grupo34.pdf (Documento del informe del proyecto incluído el respectivo Diccionario de Datos (Cap. IV))
 		  Diagrama Relacional - Servicio Técnico Informático.png (Diagrama entidad-relacion)
-		  Diccionario de datos.docx (Respectivo diccionario de datos del diagrama entidad-relacion)
