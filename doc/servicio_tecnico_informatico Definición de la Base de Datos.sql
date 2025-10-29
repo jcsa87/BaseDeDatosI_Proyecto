@@ -2,38 +2,37 @@ CREATE DATABASE servicio_tecnico_informatico
 
 USE servicio_tecnico_informatico
 
-CREATE TABLE Marca (
+CREATE TABLE marca (
     id_marca INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Tipo (
+CREATE TABLE tipo_equipo (
     id_tipo INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE EstadoReparacion (
-    id_estadoReparacion INT PRIMARY KEY IDENTITY(1,1),
-    descripcion VARCHAR(255)
+CREATE TABLE estado_reparacion (
+    id_estado_reparacion INT PRIMARY KEY IDENTITY(1,1),
+    descripcion VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE MedioDePago (
+CREATE TABLE medio_de_pago (
     id_medioDePago INT PRIMARY KEY IDENTITY(1,1),
-    descripcion VARCHAR(100)
+    descripcion VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE CategoriaRepuesto (
+CREATE TABLE categoria_repuesto (
     id_categoria_repuesto INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(100)
+    nombre VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Direccion (
+CREATE TABLE direccion (
     id_direccion INT PRIMARY KEY IDENTITY(1,1),
     direccion VARCHAR(255),  
     calle VARCHAR(150),
     altura VARCHAR(20),
     piso VARCHAR(10),
-    depto VARCHAR(10),
     numero_depto VARCHAR(10)
 );
 
@@ -42,36 +41,32 @@ CREATE TABLE rol (
     descripcion VARCHAR(50)
 )
 
-CREATE TABLE Usuario (
+CREATE TABLE usuario (
     id_usuario INT PRIMARY KEY IDENTITY(1,1),
     usuario VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(100),
     apellido VARCHAR(100),
     id_rol INT, 
     email VARCHAR(100) NOT NULL UNIQUE,
-    contraseña VARCHAR(255) NOT NULL
+    contraseña VARCHAR(255) NOT NULL,
+    CONSTRAINT FK_usuario_rol FOREIGN KEY(id_rol) REFERENCES rol(id_rol)
 );
 
-ALTER TABLE usuario
-    ADD CONSTRAINT FK_usuario_rol FOREIGN KEY(id_rol) REFERENCES rol(id_rol)
-
-GO
-
-CREATE TABLE Proveedor (
+CREATE TABLE proveedor (
     id_proveedor INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(150),
     id_categoria_repuesto INT,
-    CONSTRAINT FK_Proveedor_Categoria FOREIGN KEY (id_categoria_repuesto) REFERENCES CategoriaRepuesto(id_categoria_repuesto)
+    CONSTRAINT FK_proveedor_categoria FOREIGN KEY (id_categoria_repuesto) REFERENCES categoria_repuesto(id_categoria_repuesto)
 );
 
-CREATE TABLE Modelo (
+CREATE TABLE modelo (
     id_modelo INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(100),
     id_marca INT,
-    CONSTRAINT FK_Modelo_Marca FOREIGN KEY (id_marca) REFERENCES Marca(id_marca)
+    CONSTRAINT FK_modelo_marca FOREIGN KEY (id_marca) REFERENCES marca(id_marca)
 );
 
-CREATE TABLE Cliente (
+CREATE TABLE cliente (
     id_cliente INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
@@ -80,282 +75,186 @@ CREATE TABLE Cliente (
     id_direccion INT,
     email VARCHAR(100) UNIQUE,
     id_usuario INT,
-    CONSTRAINT FK_Cliente_Direccion FOREIGN KEY (id_direccion) REFERENCES Direccion(id_direccion),
-    CONSTRAINT FK_Cliente_Usuario FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+    CONSTRAINT FK_cliente_direccion FOREIGN KEY (id_direccion) REFERENCES direccion(id_direccion),
+    CONSTRAINT FK_cliente_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
 GO
 
-CREATE TABLE Repuesto (
+CREATE TABLE repuesto (
     id_repuesto INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(150) NOT NULL,
     marca VARCHAR(100),
     stock INT,
     id_proveedor INT,
     id_categoria_repuesto INT,
-    CONSTRAINT FK_Repuesto_Proveedor FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id_proveedor),
-    CONSTRAINT FK_Repuesto_Categoria FOREIGN KEY (id_categoria_repuesto) REFERENCES CategoriaRepuesto(id_categoria_repuesto)
+    CONSTRAINT FK_repuesto_proveedor FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor),
+    CONSTRAINT FK_repuesto_categoria FOREIGN KEY (id_categoria_repuesto) REFERENCES categoria_repuesto(id_categoria_repuesto)
 );
 
-CREATE TABLE Equipo (
+CREATE TABLE equipo (
     id_equipo INT PRIMARY KEY IDENTITY(1,1),
     id_cliente INT NOT NULL,
     id_tipo INT,
     id_modelo INT,
-    CONSTRAINT FK_Equipo_Cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
-    CONSTRAINT FK_Equipo_Tipo FOREIGN KEY (id_tipo) REFERENCES Tipo(id_tipo),
-    CONSTRAINT FK_Equipo_Modelo FOREIGN KEY (id_modelo) REFERENCES Modelo(id_modelo)
+    CONSTRAINT FK_equipo_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+    CONSTRAINT FK_equipo_tipo FOREIGN KEY (id_tipo) REFERENCES tipo_equipo(id_tipo),
+    CONSTRAINT FK_equipo_modelo FOREIGN KEY (id_modelo) REFERENCES modelo(id_modelo)
 );
 
 CREATE TABLE ingreso_equipo (
     id_ingreso_equipo INT,
-    falla VARCHAR(1000),
+    falla VARCHAR(255),
     fecha_ingreso DATETIME DEFAULT GETDATE(),
     id_cliente INT,
     id_equipo INT,
     CONSTRAINT PK_ingreso_equipo PRIMARY KEY(id_cliente, id_equipo, id_ingreso_equipo),
-    CONSTRAINT FK_ingreso_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
-    CONSTRAINT FK_ingreso_equipo FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo)
+    CONSTRAINT FK_ingreso_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+    CONSTRAINT FK_ingreso_equipo FOREIGN KEY (id_equipo) REFERENCES equipo(id_equipo)
 );
 
 GO
 
-CREATE TABLE Diagnostico (
+CREATE TABLE diagnostico (
     id_diagnostico INT PRIMARY KEY IDENTITY(1,1),
     motivo VARCHAR(1000), -- Se detalla análisis, motivo y solución
-    fecha_diagnostico DATETIME,
+    fecha_diagnostico DATE,
     costo_estimado DECIMAL(10, 2),
     id_equipo INT,
     id_emp INT, -- Se referencia a la tabla usuario 
-    CONSTRAINT FK_Diagnostico_Equipo FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo),
-    CONSTRAINT FK_Diagnostico_Empleado FOREIGN KEY (id_emp) REFERENCES Usuario(id_usuario)
+    CONSTRAINT FK_diagnostico_equipo FOREIGN KEY (id_equipo) REFERENCES equipo(id_equipo),
+    CONSTRAINT FK_diagnostico_empleado FOREIGN KEY (id_emp) REFERENCES usuario(id_usuario)
 );
 
 GO
 
-CREATE TABLE Reparacion (
+CREATE TABLE reparacion (
     id_reparacion INT PRIMARY KEY IDENTITY(1,1),
     fecha_resolucion DATETIME,
     id_diagnostico INT,
-    id_estadoReparacion INT,
+    id_estado_reparacion INT,
     monto_total DECIMAL(10, 2),
-    CONSTRAINT FK_Reparacion_Diagnostico FOREIGN KEY (id_diagnostico) REFERENCES Diagnostico(id_diagnostico),
-    CONSTRAINT FK_Reparacion_Estado FOREIGN KEY (id_estadoReparacion) REFERENCES EstadoReparacion(id_estadoReparacion)
+    CONSTRAINT FK_reparacion_diagnostico FOREIGN KEY (id_diagnostico) REFERENCES diagnostico(id_diagnostico),
+    CONSTRAINT FK_reparacion_estado FOREIGN KEY (id_estado_reparacion) REFERENCES estado_reparacion(id_estado_reparacion)
 );
 
 GO
 
-CREATE TABLE Repuesto_Reparacion (
+CREATE TABLE repuesto_reparacion (
     id_reparacion INT NOT NULL,
     id_repuesto INT NOT NULL,
-    CONSTRAINT PK_RepuestoReparacion PRIMARY KEY (id_reparacion, id_repuesto),
-    CONSTRAINT FK_RepRep_Reparacion FOREIGN KEY (id_reparacion) REFERENCES Reparacion(id_reparacion),
-    CONSTRAINT FK_RepRep_Repuesto FOREIGN KEY (id_repuesto) REFERENCES Repuesto(id_repuesto)
+    CONSTRAINT PK_repuesto_reparacion PRIMARY KEY (id_reparacion, id_repuesto), -- Clave primaria compuesta
+    CONSTRAINT FK_rep_reparacion_reparacion FOREIGN KEY (id_reparacion) REFERENCES reparacion(id_reparacion),
+    CONSTRAINT FK_rep_reparacion_repuesto FOREIGN KEY (id_repuesto) REFERENCES repuesto(id_repuesto)
 );
 
 GO
 
-CREATE TABLE Factura (
-    id_factura INT PRIMARY KEY IDENTITY(1,1),
-    id_cliente INT,
-    id_reparacion INT,
-    importe DECIMAL(10, 2),
-    fecha_emision DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_Factura_Cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
-    CONSTRAINT FK_Factura_Reparacion FOREIGN KEY (id_reparacion) REFERENCES Reparacion(id_reparacion)
-);
-
-GO
-
--- Nivel 7: Tablas finales
-PRINT 'Creando tablas de Nivel 7...'
-
-CREATE TABLE Pago (
-    id_pago INT PRIMARY KEY IDENTITY(1,1),
-    id_medioDePago INT,
-    id_factura INT,
-    monto DECIMAL(10, 2),
-    CONSTRAINT FK_Pago_MedioDePago FOREIGN KEY (id_medioDePago) REFERENCES MedioDePago(id_medioDePago),
-    CONSTRAINT FK_Pago_Factura FOREIGN KEY (id_factura) REFERENCES Factura(id_factura)
-);
-
-GO
-
-PRINT 'Script completado. Todas las tablas han sido creadas.'CREATE DATABASE servicio_tecnico_informatico
-
-USE servicio_tecnico_informatico
-
-CREATE TABLE Marca (
-    id_marca INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE Tipo (
-    id_tipo INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE EstadoReparacion (
-    id_estadoReparacion INT PRIMARY KEY IDENTITY(1,1),
-    descripcion VARCHAR(255)
-);
-
-CREATE TABLE MedioDePago (
-    id_medioDePago INT PRIMARY KEY IDENTITY(1,1),
-    descripcion VARCHAR(100)
-);
-
-CREATE TABLE CategoriaRepuesto (
-    id_categoria_repuesto INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(100)
-);
-
-CREATE TABLE Direccion (
-    id_direccion INT PRIMARY KEY IDENTITY(1,1),
-    direccion VARCHAR(255),  
-    calle VARCHAR(150),
-    altura VARCHAR(20),
-    piso VARCHAR(10),
-    depto VARCHAR(10),
-    numero_depto VARCHAR(10)
-);
-
-CREATE TABLE rol (
-    id_rol INT PRIMARY KEY,
-    descripcion VARCHAR(50)
-)
-
-CREATE TABLE Usuario (
-    id_usuario INT PRIMARY KEY IDENTITY(1,1),
-    usuario VARCHAR(50) NOT NULL UNIQUE,
-    nombre VARCHAR(100),
-    apellido VARCHAR(100),
-    id_rol INT, 
-    email VARCHAR(100) NOT NULL UNIQUE,
-    contraseña VARCHAR(255) NOT NULL
-);
-
-ALTER TABLE usuario
-    ADD CONSTRAINT FK_usuario_rol FOREIGN KEY(id_rol) REFERENCES rol(id_rol)
-
-GO
-
-CREATE TABLE Proveedor (
-    id_proveedor INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(150),
-    id_categoria_repuesto INT,
-    CONSTRAINT FK_Proveedor_Categoria FOREIGN KEY (id_categoria_repuesto) REFERENCES CategoriaRepuesto(id_categoria_repuesto)
-);
-
-CREATE TABLE Modelo (
-    id_modelo INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(100),
-    id_marca INT,
-    CONSTRAINT FK_Modelo_Marca FOREIGN KEY (id_marca) REFERENCES Marca(id_marca)
-);
-
-CREATE TABLE Cliente (
-    id_cliente INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(100) NOT NULL,
-    apellido VARCHAR(100) NOT NULL,
-    dni VARCHAR(20) UNIQUE,
-    telefono VARCHAR(50),
-    id_direccion INT,
-    email VARCHAR(100) UNIQUE,
-    id_usuario INT,
-    CONSTRAINT FK_Cliente_Direccion FOREIGN KEY (id_direccion) REFERENCES Direccion(id_direccion),
-    CONSTRAINT FK_Cliente_Usuario FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
-);
-
-GO
-
-CREATE TABLE Repuesto (
-    id_repuesto INT PRIMARY KEY IDENTITY(1,1),
-    nombre VARCHAR(150) NOT NULL,
-    marca VARCHAR(100),
-    stock INT,
-    id_proveedor INT,
-    id_categoria_repuesto INT,
-    CONSTRAINT FK_Repuesto_Proveedor FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id_proveedor),
-    CONSTRAINT FK_Repuesto_Categoria FOREIGN KEY (id_categoria_repuesto) REFERENCES CategoriaRepuesto(id_categoria_repuesto)
-);
-
-CREATE TABLE Equipo (
-    id_equipo INT PRIMARY KEY IDENTITY(1,1),
-    id_cliente INT NOT NULL,
-    id_tipo INT,
-    id_modelo INT,
-    CONSTRAINT FK_Equipo_Cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
-    CONSTRAINT FK_Equipo_Tipo FOREIGN KEY (id_tipo) REFERENCES Tipo(id_tipo),
-    CONSTRAINT FK_Equipo_Modelo FOREIGN KEY (id_modelo) REFERENCES Modelo(id_modelo)
-);
-
-CREATE TABLE ingreso_equipo (
-    id_ingreso_equipo INT,
-    falla VARCHAR(1000),
-    fecha_ingreso DATETIME DEFAULT GETDATE(),
-    id_cliente INT,
-    id_equipo INT,
-    CONSTRAINT PK_ingreso_equipo PRIMARY KEY(id_cliente, id_equipo, id_ingreso_equipo),
-    CONSTRAINT FK_ingreso_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
-    CONSTRAINT FK_ingreso_equipo FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo)
-);
-
-GO
-
-CREATE TABLE Diagnostico (
-    id_diagnostico INT PRIMARY KEY IDENTITY(1,1),
-    motivo VARCHAR(1000), -- Se detalla análisis, motivo y solución
-    fecha_diagnostico DATETIME DEFAULT GETDATE(),
-    costo_estimado DECIMAL(10, 2),
-    id_equipo INT,
-    id_emp INT, -- Se referencia a la tabla usuario 
-    CONSTRAINT FK_Diagnostico_Equipo FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo),
-    CONSTRAINT FK_Diagnostico_Empleado FOREIGN KEY (id_emp) REFERENCES Usuario(id_usuario)
-);
-
-GO
-
-CREATE TABLE Reparacion (
-    id_reparacion INT PRIMARY KEY IDENTITY(1,1),
-    fecha_estimada DATE,
-    fecha_resolucion DATETIME,
-    id_diagnostico INT,
-    id_estadoReparacion INT,
-    monto_total DECIMAL(10, 2),
-    CONSTRAINT FK_Reparacion_Diagnostico FOREIGN KEY (id_diagnostico) REFERENCES Diagnostico(id_diagnostico),
-    CONSTRAINT FK_Reparacion_Estado FOREIGN KEY (id_estadoReparacion) REFERENCES EstadoReparacion(id_estadoReparacion)
-);
-
-GO
-
-CREATE TABLE Repuesto_Reparacion (
-    id_reparacion INT NOT NULL,
-    id_repuesto INT NOT NULL,
-    CONSTRAINT PK_RepuestoReparacion PRIMARY KEY (id_reparacion, id_repuesto), -- Clave primaria compuesta
-    CONSTRAINT FK_RepRep_Reparacion FOREIGN KEY (id_reparacion) REFERENCES Reparacion(id_reparacion),
-    CONSTRAINT FK_RepRep_Repuesto FOREIGN KEY (id_repuesto) REFERENCES Repuesto(id_repuesto)
-);
-
-GO
-
-CREATE TABLE Factura (
+CREATE TABLE factura (
     id_factura INT PRIMARY KEY IDENTITY(1,1),
     id_cliente INT,
     fecha_emision DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_Factura_Cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
+    CONSTRAINT FK_factura_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
 );
+
 GO
 
-
-CREATE TABLE Pago (
+CREATE TABLE pago (
     id_pago INT PRIMARY KEY IDENTITY(1,1),
-    id_medioDePago INT,
+    id_medio_de_pago INT,
     id_factura INT,
     monto DECIMAL(10, 2),
     id_reparacion INT,
-    CONSTRAINT FK_Pago_MedioDePago FOREIGN KEY (id_medioDePago) REFERENCES MedioDePago(id_medioDePago),
-    CONSTRAINT FK_Pago_Reparacion FOREIGN KEY (id_reparacion) REFERENCES Reparacion(id_reparacion),
-    CONSTRAINT FK_Pago_Factura FOREIGN KEY (id_factura) REFERENCES Factura(id_factura)
+    CONSTRAINT FK_pago_medio_de_pago FOREIGN KEY (id_medio_de_pago) REFERENCES medio_de_pago(id_medioDePago),
+    CONSTRAINT FK_pago_reparacion FOREIGN KEY (id_reparacion) REFERENCES reparacion(id_reparacion),
+    CONSTRAINT FK_pago_factura FOREIGN KEY (id_factura) REFERENCES factura(id_factura)
 );
+
+
+
+GO
+
+-- Inserción de datos
+INSERT INTO rol (id_rol, descripcion) VALUES
+(1, 'Administrador'),
+(2, 'Tecnico'),
+(3, 'Cliente');
+
+INSERT INTO marca (nombre) 
+VALUES ('Dell'); 
+
+INSERT INTO tipo_equipo (nombre) 
+VALUES ('Notebook');
+
+INSERT INTO estado_reparacion (descripcion) VALUES
+('Esperando a ser revisado'),     
+('En Reparacion'),             
+('Reparado');                 
+
+INSERT INTO medio_de_pago (descripcion) 
+VALUES ('Efectivo'); 
+
+INSERT INTO categoria_repuesto (nombre) 
+VALUES ('Pantallas'); 
+
+INSERT INTO direccion (calle, altura, piso, numero_depto) 
+VALUES ('Av. Siempre Viva', '742', 'PB', 'A'); 
+
+GO
+
+-- Creamos un usuario Técnico (Numero de rol = 2)
+INSERT INTO usuario (usuario, nombre, apellido, id_rol, email, contraseña) 
+VALUES ('jperez', 'Juan', 'Perez', 2, 'jperez@tecnico.com', 'contraseña');
+
+-- Creamos un usuario Cliente (Numero de rol = 3)
+INSERT INTO usuario (usuario, nombre, apellido, id_rol, email, contraseña) 
+VALUES ('cvega', 'Carla', 'Vega', 3, 'carla.vega@cliente.com', 'contraseña2');
+
+INSERT INTO proveedor (nombre, id_categoria_repuesto) 
+VALUES ('Baterias Para Samsung', 1);
+
+INSERT INTO modelo (nombre, id_marca) 
+VALUES ('XPS 15 9500', 1);
+
+GO
+
+INSERT INTO cliente (nombre, apellido, dni, telefono, id_direccion, email, id_usuario) 
+VALUES ('Carla', 'Vega', '30123456', '3794123456', 1, 'carla.vega@cliente.com', 2); 
+
+INSERT INTO repuesto (nombre, marca, stock, id_proveedor, id_categoria_repuesto) 
+VALUES ('Panel OLED 15.6" 4K', 'Dell', 10, 1, 1);
+
+GO
+
+INSERT INTO equipo (id_cliente, id_tipo, id_modelo) 
+VALUES (1, 1, 1); 
+
+GO
+
+INSERT INTO ingreso_equipo (id_ingreso_equipo, falla, id_cliente, id_equipo) 
+VALUES (1, 'Pantalla rota, no enciende.', 1, 1);
+
+-- Creamos un diagnóstico (usa FK equipo=1 y usuario_tecnico=1)
+INSERT INTO diagnostico (motivo, fecha_diagnostico, costo_estimado, id_equipo, id_emp) 
+VALUES ('Requiere cambio de panel de pantalla. El costo incluye repuesto y mano de obra.', '2025-10-31', 350.50, 1, 1);
+
+GO
+
+INSERT INTO reparacion (fecha_resolucion, id_diagnostico, id_estado_reparacion, monto_total) 
+VALUES (NULL, 1, 3, 350.50); --  Fecha resolucion NULL porque aún no se repara.
+
+GO
+
+-- Vinculamos el repuesto (ID = 3) a la reparación (ID = 1)
+INSERT INTO repuesto_reparacion (id_reparacion, id_repuesto) 
+VALUES (3, 1);
+
+INSERT INTO factura (id_cliente, fecha_emision) 
+VALUES (1, GETDATE());
+
+GO
+
+INSERT INTO pago (id_medio_de_pago, id_factura, monto, id_reparacion) 
+VALUES (1, 1, 350.50, 3);
+
 GO
