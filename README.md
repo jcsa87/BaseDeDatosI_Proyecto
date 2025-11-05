@@ -1,23 +1,44 @@
 <p align="center">
-  <img src="doc/logo_facena.png" alt="Logo 1" height="100">
-  <img src="doc/Logo-UNNE.png" alt="Logo 2" height="100">
+  <img src="doc/logo_facena.png" alt="Logo FaCENA" height="100">
+  <img src="doc/Logo-UNNE.png" alt="Logo UNNE" height="100">
 </p>
 
-# Bases de Datos I - Proyecto de Estudio
+<h1 align="center">📚 Bases de Datos I - Proyecto de Estudio</h1>
 
-Este espacio propone presentar la información para organizar el desarrollo del Proyecto de Estudio de la asignatura Bases de Datos I (FaCENA - UNNE)
+<p align="center">
+  <em>FaCENA - Universidad Nacional del Nordeste</em><br>
+  <strong>Proyecto de Estudio - Servicio Técnico Informático</strong>
+</p>
 
-# Integrantes
+<p align="center">
+  <a href="https://github.com/" target="_blank">
+    <img src="https://img.shields.io/badge/Repositorio-Académico-blue?style=for-the-badge&logo=github" alt="Repositorio">
+  </a>
+  <a href="1.md">
+    <img src="https://img.shields.io/badge/Ir_al_siguiente_→-0088cc?style=for-the-badge" alt="Siguiente">
+  </a>
+</p>
 
-- _Senicen Acosta, Juan Cruz (45.645.707)_
-- _Alegre, Leonel Francisco (45.169.283)_
-- _Castillo, Geremias Benjamin (45.645.652)_
-- _Barberan, Andres Leon (44.826.087)_
+---
 
-**Estructura del repositorio**
+## 🧩 Descripción del Proyecto
 
-    > ## BaseDeDatosI_Proyecto
-    - doc (documentos e información acerca del proyecto)
-    	  Integrador_Grupo34.pdf (Documento del informe del proyecto incluído el respectivo Diccionario de Datos (Cap. IV))
-    	  Diagrama Relacional - Servicio Técnico Informático.png (Diagrama entidad-relacion)
-      "servicio_tecnico_informatico Definición de la Base de Datos.sql" - Base de Datos del sistema.
+Este espacio tiene como objetivo organizar y presentar la información correspondiente al desarrollo del **Proyecto de Estudio** de la asignatura **Bases de Datos I**, en la Facultad de Ciencias Exactas y Naturales y Agrimensura (**FaCENA**), Universidad Nacional del Nordeste (**UNNE**).
+
+El proyecto aborda el diseño, modelado y desarrollo de una base de datos para un sistema de **Servicio Técnico Informático**, siguiendo las etapas de análisis, diseño conceptual, lógico y físico.
+
+---
+
+## 👥 Integrantes del Grupo 34
+
+| Nombre y Apellido                | DNI         |
+|---------------------------------|--------------|
+| Senicen Acosta, Juan Cruz       | 45.645.707   |
+| Alegre, Leonel Francisco        | 45.169.283   |
+| Castillo, Geremias Benjamín     | 45.645.652   |
+| Barberan, Andrés León           | 44.826.087   |
+
+---
+
+## 🗂️ Estructura del Repositorio
+
