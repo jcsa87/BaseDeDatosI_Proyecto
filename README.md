@@ -44,14 +44,16 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 
 ## 🗂️ Estructura del Repositorio
 
-BaseDeDatosI_Proyecto/
+```text
+📁 BaseDeDatosI_Proyecto
 │
-├── doc/ # Documentos del proyecto
-│ ├── Integrador_Grupo34.pdf # Informe del proyecto con Diccionario de Datos (Cap. IV)
-│ ├── Diagrama Relacional - Servicio Técnico Informático.png
-│ └── servicio_tecnico_informatico Definición de la Base de Datos.sql
+├── 📂 doc/                         # Documentos y material del proyecto
+│   ├── 📄 Integrador_Grupo34.pdf   # Informe integrador con Diccionario de Datos (Cap. IV)
+│   ├── 🧩 Diagrama Relacional - Servicio Técnico Informático.png
+│   └── 💾 servicio_tecnico_informatico Definición de la Base de Datos.sql
 │
-└── README.md # Este archivo
+└── 📘 README.md                    # Archivo principal de documentación del proyecto
+```
 
 ---
 
