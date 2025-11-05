@@ -1,6 +1,4 @@
-from pathlib import Path
-
-readme_content = """<p align="center">
+<p align="center">
 <img src="doc/logo_facena.png" alt="Logo FaCENA" height="100">
 <img src="doc/Logo-UNNE.png" alt="Logo UNNE" height="100">
 
