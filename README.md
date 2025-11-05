@@ -1,8 +1,9 @@
 from pathlib import Path
 
 readme_content = """<p align="center">
-  <img src="doc/logo_facena.png" alt="Logo FaCENA" height="100">
-  <img src="doc/Logo-UNNE.png" alt="Logo UNNE" height="100">
+<img src="doc/logo_facena.png" alt="Logo FaCENA" height="100">
+<img src="doc/Logo-UNNE.png" alt="Logo UNNE" height="100">
+
 </p>
 
 <h1 align="center">📚 Bases de Datos I - Proyecto de Estudio</h1>
@@ -33,35 +34,57 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 
 ## 👥 Integrantes del Grupo 34
 
-| Nombre y Apellido                | DNI         |
-|---------------------------------|--------------|
-| Senicen Acosta, Juan Cruz       | 45.645.707   |
-| Alegre, Leonel Francisco        | 45.169.283   |
-| Castillo, Geremias Benjamín     | 45.645.652   |
-| Barberan, Andrés León           | 44.826.087   |
+| Nombre y Apellido           | DNI        |
+| --------------------------- | ---------- |
+| Senicen Acosta, Juan Cruz   | 45.645.707 |
+| Alegre, Leonel Francisco    | 45.169.283 |
+| Castillo, Geremias Benjamín | 45.645.652 |
+| Barberan, Andrés León       | 44.826.087 |
 
 ---
 
 ## 🗂️ Estructura del Repositorio
 
+## 🗂️ Estructura del Repositorio
+
 ```text
-📁 BaseDeDatosI_Proyecto
+📁 BaseDeDatosI_Proyecto/
 │
-├── 📂 doc/                         # Documentos y material del proyecto
-│   ├── 📄 Integrador_Grupo34.pdf   # Informe integrador con Diccionario de Datos (Cap. IV)
-│   ├── 🧩 Diagrama Relacional - Servicio Técnico Informático.png
-│   └── 💾 servicio_tecnico_informatico Definición de la Base de Datos.sql
+├── 📂 doc/                   # Documentos y material del promegto
 │
-└── 📘 README.md                    # Archivo principal de documentación del proyecto
+├── 📂 script/                # Scripts de investigación y desarrollo
+│   │
+│   ├── 📂 Backup y Restore. Backup en Línea/
+│   │   └── 💾 backup_investigacion.sql
+│   │
+│   ├── 📂 Manejo de transacciones y transacciones anidadas/
+│   │   └── 💾 transacciones_investigacion.sql
+│   │
+│   ├── 📂 Optimización de consultas a través de índices/
+│   │   └── 💾 indices_investigacion.sql
+│   │
+│   └── 📂 Procedimientos y funciones almacenadas/
+│       └── 💾 procedimientos_investigacion.sql
+│
+├── 📄 Desarrollo.md
+├── 🧩 Diagrama Relacional - Servicio Técnico Informático.png
+├── 📄 Integrador_Grupo34.pdf  # Informe principal (con Diccionario de Datos)
+├── 📄 Introduccion.md
+├── 🖼️ Logo-UNNE.png
+├── 🖼️ logo_facena.png
+├── 🖼️ logo_pagina_ok.png
+├── 🖼️ unne2023.png
+├── 💾 servicio_tecnico_informatico Definición de la Base de Datos.sql
+└── 📘 README.md
 ```
 
 ---
 
 ## 💡 Recursos incluidos
 
-- **📘 Informe integrador:** documento detallado con objetivos, diseño y resultados.  
-- **🧩 Diagrama Entidad–Relación:** representación visual del modelo lógico.  
-- **💾 Script SQL:** creación de la base de datos y definición de las tablas.  
+- **📘 Informe integrador:** documento detallado con objetivos, diseño y resultados.
+- **🧩 Diagrama Entidad–Relación:** representación visual del modelo lógico.
+- **💾 Script SQL:** creación de la base de datos y definición de las tablas.
 
 ---
 
@@ -76,3 +99,4 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 <p align="center">
   <sub>© 2025 FaCENA - UNNE | Proyecto de Estudio - Bases de Datos I</sub>
 </p>
+```
