@@ -43,8 +43,6 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 
 ## 🗂️ Estructura del Repositorio
 
-## 🗂️ Estructura del Repositorio
-
 ```text
 📁 BaseDeDatosI_Proyecto/
 │
@@ -61,8 +59,11 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 │   ├── 📂 Optimización de consultas a través de índices/
 │   │   └── 💾 indices_investigacion.sql
 │   │
-│   └── 📂 Procedimientos y funciones almacenadas/
-│       └── 💾 procedimientos_investigacion.sql
+│   ├── 📂 Procedimientos y funciones almacenadas/
+│   │   └── 💾 procedimientos_investigacion.sql
+│   │
+│   └── 💾 servicio_tecnico_informatico.sql # Definición de la Base de Datos
+│
 │
 ├── 📄 Desarrollo.md
 ├── 🧩 Diagrama Relacional - Servicio Técnico Informático.png
@@ -72,7 +73,6 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 ├── 🖼️ logo_facena.png
 ├── 🖼️ logo_pagina_ok.png
 ├── 🖼️ unne2023.png
-├── 💾 servicio_tecnico_informatico Definición de la Base de Datos.sql
 └── 📘 README.md
 ```
 
@@ -97,4 +97,3 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 <p align="center">
   <sub>© 2025 FaCENA - UNNE | Proyecto de Estudio - Bases de Datos I</sub>
 </p>
-```

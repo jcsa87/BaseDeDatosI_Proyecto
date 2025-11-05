@@ -48,7 +48,7 @@ CREATE TABLE usuario (
     apellido VARCHAR(100),
     id_rol INT, 
     email VARCHAR(100) NOT NULL UNIQUE,
-    contraseña VARCHAR(255) NOT NULL,
+    contraseï¿½a VARCHAR(255) NOT NULL,
     CONSTRAINT FK_usuario_rol FOREIGN KEY(id_rol) REFERENCES rol(id_rol)
 );
 
@@ -117,7 +117,7 @@ GO
 
 CREATE TABLE diagnostico (
     id_diagnostico INT PRIMARY KEY IDENTITY(1,1),
-    motivo VARCHAR(1000), -- Se detalla análisis, motivo y solución
+    motivo VARCHAR(1000), -- Se detalla anï¿½lisis, motivo y soluciï¿½n
     fecha_diagnostico DATE,
     costo_estimado DECIMAL(10, 2),
     id_equipo INT,
@@ -174,7 +174,7 @@ CREATE TABLE pago (
 
 GO
 
--- Inserción de datos
+-- Inserciï¿½n de datos
 INSERT INTO rol (id_rol, descripcion) VALUES
 (1, 'Administrador'),
 (2, 'Tecnico'),
@@ -202,13 +202,13 @@ VALUES ('Av. Siempre Viva', '742', 'PB', 'A');
 
 GO
 
--- Creamos un usuario Técnico (Numero de rol = 2)
-INSERT INTO usuario (usuario, nombre, apellido, id_rol, email, contraseña) 
-VALUES ('jperez', 'Juan', 'Perez', 2, 'jperez@tecnico.com', 'contraseña');
+-- Creamos un usuario Tï¿½cnico (Numero de rol = 2)
+INSERT INTO usuario (usuario, nombre, apellido, id_rol, email, contraseï¿½a) 
+VALUES ('jperez', 'Juan', 'Perez', 2, 'jperez@tecnico.com', 'contraseï¿½a');
 
 -- Creamos un usuario Cliente (Numero de rol = 3)
-INSERT INTO usuario (usuario, nombre, apellido, id_rol, email, contraseña) 
-VALUES ('cvega', 'Carla', 'Vega', 3, 'carla.vega@cliente.com', 'contraseña2');
+INSERT INTO usuario (usuario, nombre, apellido, id_rol, email, contraseï¿½a) 
+VALUES ('cvega', 'Carla', 'Vega', 3, 'carla.vega@cliente.com', 'contraseï¿½a2');
 
 INSERT INTO proveedor (nombre, id_categoria_repuesto) 
 VALUES ('Baterias Para Samsung', 1);
@@ -234,18 +234,18 @@ GO
 INSERT INTO ingreso_equipo (id_ingreso_equipo, falla, id_cliente, id_equipo) 
 VALUES (1, 'Pantalla rota, no enciende.', 1, 1);
 
--- Creamos un diagnóstico (usa FK equipo=1 y usuario_tecnico=1)
+-- Creamos un diagnï¿½stico (usa FK equipo=1 y usuario_tecnico=1)
 INSERT INTO diagnostico (motivo, fecha_diagnostico, costo_estimado, id_equipo, id_emp) 
 VALUES ('Requiere cambio de panel de pantalla. El costo incluye repuesto y mano de obra.', '2025-10-31', 350.50, 1, 1);
 
 GO
 
 INSERT INTO reparacion (fecha_resolucion, id_diagnostico, id_estado_reparacion, monto_total) 
-VALUES (NULL, 1, 3, 350.50); --  Fecha resolucion NULL porque aún no se repara.
+VALUES (NULL, 1, 3, 350.50); --  Fecha resolucion NULL porque aï¿½n no se repara.
 
 GO
 
--- Vinculamos el repuesto (ID = 3) a la reparación (ID = 1)
+-- Vinculamos el repuesto (ID = 3) a la reparaciï¿½n (ID = 1)
 INSERT INTO repuesto_reparacion (id_reparacion, id_repuesto) 
 VALUES (3, 1);
 
