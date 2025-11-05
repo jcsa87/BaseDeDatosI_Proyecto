@@ -108,7 +108,7 @@ SELECT dbo.HelloWorldFunc();
 
 ## 🧱 Buenas Prácticas
 
-1. **Usar nombres descriptivos**: evita prefijos reservados como `sp_` en SQL Server.
+1. **Usar nombres descriptivos**: Debemos evitar prefijos reservados como `sp_` en SQL Server.
 2. **Controlar errores** con `TRY...CATCH` dentro de los procedimientos.
 3. **Evitar cursores** y preferir operaciones basadas en conjuntos.
 4. **Optimizar índices** en columnas de búsqueda o unión.
