@@ -130,3 +130,14 @@ Ambos, correctamente implementados, fortalecen la arquitectura de datos y promue
 - Microsoft Docs: [CREATE PROCEDURE (Transact‑SQL)](https://learn.microsoft.com/es-es/sql/t-sql/statements/create-procedure-transact-sql)  
 - Microsoft Docs: [CREATE FUNCTION (Transact‑SQL)](https://learn.microsoft.com/es-es/sql/t-sql/statements/create-function-transact-sql)  
 - Calbimonte, D. *Funciones frente a los procedimientos almacenados en SQL Server*, SQLShack (2019)
+
+---
+
+<p align="center">
+  <a href="README.md" style="text-decoration:none; margin-right:20px;">
+    <img src="https://img.shields.io/badge/Capítulo%20Anterior-README-666666?style=for-the-badge" alt="Anterior">
+  </a>
+  <a href="Desarrollo.md" style="text-decoration:none;">
+    <img src="https://img.shields.io/badge/Siguiente%20Capítulo-Desarrollo-0088cc?style=for-the-badge" alt="Siguiente">
+  </a>
+</p>
