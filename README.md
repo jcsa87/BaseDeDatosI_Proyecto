@@ -1,4 +1,6 @@
-<p align="center">
+from pathlib import Path
+
+readme_content = """<p align="center">
   <img src="doc/logo_facena.png" alt="Logo FaCENA" height="100">
   <img src="doc/Logo-UNNE.png" alt="Logo UNNE" height="100">
 </p>
@@ -42,3 +44,33 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 
 ## 🗂️ Estructura del Repositorio
 
+BaseDeDatosI_Proyecto/
+│
+├── doc/ # Documentos del proyecto
+│ ├── Integrador_Grupo34.pdf # Informe del proyecto con Diccionario de Datos (Cap. IV)
+│ ├── Diagrama Relacional - Servicio Técnico Informático.png
+│ └── servicio_tecnico_informatico Definición de la Base de Datos.sql
+│
+└── README.md # Este archivo
+
+---
+
+## 💡 Recursos incluidos
+
+- **📘 Informe integrador:** documento detallado con objetivos, diseño y resultados.  
+- **🧩 Diagrama Entidad–Relación:** representación visual del modelo lógico.  
+- **💾 Script SQL:** creación de la base de datos y definición de las tablas.  
+
+---
+
+<p align="center">
+  <a href="1.md" style="text-decoration:none;">
+    <img src="https://img.shields.io/badge/Siguiente%20Capítulo-1.md-0088cc?style=for-the-badge" alt="Siguiente">
+  </a>
+</p>
+
+---
+
+<p align="center">
+  <sub>© 2025 FaCENA - UNNE | Proyecto de Estudio - Bases de Datos I</sub>
+</p>
