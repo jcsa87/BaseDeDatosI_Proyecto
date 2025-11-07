@@ -62,7 +62,7 @@ El proyecto aborda el diseño, modelado y desarrollo de una base de datos para u
 │   ├── 📂 Procedimientos y funciones almacenadas/
 │   │   └── 💾 procedimientos_investigacion.sql
 │   │
-│   └── 💾 servicio_tecnico_informatico.sql # Definición de la Base de Datos
+│   └── 💾 servicio_tecnico_informatico.sql # Definición de la Base de Datos con inserción de datos a modo de simulación
 │
 │
 ├── 📄 Desarrollo.md
