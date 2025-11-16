@@ -1,27 +1,125 @@
 # Investigación: Manejo de Transacciones y Anidamiento en T-SQL
 
+Aplicado al Sistema de Servicio Técnico Informático
+
+---
+
 ## 1. La Transacción y las Propiedades ACID
 
-Una **transacción** es una secuencia de operaciones T-SQL (Transact-SQL) que se ejecutan como una única unidad de trabajo lógica y atómica. Para que un SGBD (sistema gestor de bases de datos) sea considerado fiable, debe garantizar las propiedades **ACID** para cada transacción.
+Una **transacción** es una secuencia de operaciones T-SQL que se ejecutan como una única unidad de trabajo lógica. Su objetivo es garantizar que los datos permanezcan correctos, coherentes y seguros ante fallos lógicos o técnicos.
 
-* **[A] Atomicidad:** La transacción es una unidad indivisible. O se ejecutan *todas* sus operaciones con éxito, o no se ejecuta *ninguna*. Si una parte falla, el sistema debe revertir todos los cambios hechos hasta ese punto.
-* **[C] Consistencia:** La transacción debe llevar a la base de datos de un estado válido a otro estado válido. Debe preservar todas las reglas de integridad definidas (Claves Foráneas, Restricciones `CHECK`, `UNIQUE`, etc.).
-* **[I] Aislamiento (Isolation):** Las transacciones que se ejecutan de forma concurrente deben estar aisladas entre sí. Los resultados de una transacción intermedia no deben ser visibles para otras transacciones hasta que la primera haya hecho `COMMIT`.
-* **[D] Durabilidad:** Una vez que una transacción ha sido confirmada (`COMMIT`), sus cambios son permanentes y deben sobrevivir a cualquier falla del sistema (ej. reinicio), usualmente garantizado por el **Log de Transacciones** (Transaction Log).
+Para que un SGBD (Sistema Gestor de Base de Datos) sea considerado confiable, debe garantizar las propiedades **ACID**:
 
-En T-SQL, el manejo de errores se implementa de forma robusta usando bloques `TRY...CATCH`.
+### • [A] Atomicidad
+
+La transacción es indivisible: o se ejecutan todas sus operaciones o no se ejecuta ninguna.  
+Si un paso falla, todo el conjunto debe revertirse.
+
+### • [C] Consistencia
+
+La transacción lleva a la base de datos de un estado válido a otro válido, preservando reglas de integridad (PK, FK, UNIQUE, CHECK).
+
+### • [I] Aislamiento
+
+Los efectos intermedios de una transacción no deben ser visibles para otras hasta que se confirme con `COMMIT`.
+
+### • [D] Durabilidad
+
+Una vez hecha la confirmación (`COMMIT`), los cambios quedan guardados incluso ante fallas del sistema.  
+Esto lo garantiza el **Transaction Log**.
+
+---
+
+## 2. Manejo de Errores con TRY...CATCH
+
+En T-SQL, la forma más robusta de manejar errores dentro de una transacción es mediante bloques `TRY...CATCH`.
 
 ```sql
 BEGIN TRY
-    BEGIN TRANSACTION;  -- Marca el inicio de la unidad de trabajo
-    -- ... Operaciones DML (INSERT, UPDATE, DELETE) ...
-    COMMIT TRANSACTION; -- Confirma los cambios si todo es exitoso
+    BEGIN TRANSACTION;
+
+    -- Instrucciones DML
+    INSERT INTO tabla (col) VALUES ('Dato');
+
+    COMMIT TRANSACTION;   -- Se confirman los cambios
 END TRY
 BEGIN CATCH
-    -- Si ocurre un error en el bloque TRY, el control salta aquí
     IF @@TRANCOUNT > 0
-        ROLLBACK TRANSACTION; -- Revierte todos los cambios
-    -- (Lógica de manejo de errores, ej: RAISERROR)
-END CATCH
+        ROLLBACK TRANSACTION;  -- Se revierte todo
 
-➡️ Demostración de un ROLLBACK automático en el archivo .sql (EJEMPLO 1)
+    -- Manejo del error
+    SELECT ERROR_MESSAGE() AS Error;
+END CATCH;
+```
+
+**➡️ EJEMPLO 1 (alta de cliente y equipo con COMMIT)**
+
+**➡️ EJEMPLO 2 (error de integridad y ROLLBACK automático)**
+
+---
+
+## 3. SAVEPOINT: Reversión Parcial dentro de una Transacción
+
+Las transacciones no siempre necesitan revertirse por completo.
+En procesos reales, solo una parte puede fallar, mientras el resto sigue siendo válido.
+
+Para esto existe el comando `SAVE TRAN` (SAVEPOINT):
+
+```sql
+BEGIN TRAN;
+-- Paso 1 (válido)
+SAVE TRAN SP1;
+
+-- Paso 2
+-- Si este falla:
+ROLLBACK TRAN SP1;   -- Vuelve al punto SP1 sin perder Paso 1
+
+COMMIT TRAN;
+```
+
+Esto es útil, por ejemplo, cuando un diagnóstico es correcto, pero la reparación asociada es inválida.
+Queremos conservar el diagnóstico, pero revertir la reparación.
+
+**➡️ EJEMPLO 3 – Uso de SAVEPOINT**
+
+---
+
+### 4. “Transacciones Anidadas” en SQL Server
+
+SQL Server _no soporta transacciones anidadas reales_.
+Cada `BEGIN TRAN` incrementa un contador (`@@TRANCOUNT`), pero solo el último `COMMIT` hace persistir los cambios.
+
+Sin embargo, es posible simular anidamiento lógico usando múltiples SAVEPOINT:
+
+```sql
+BEGIN TRAN Principal;
+
+-- Nivel 1
+SAVE TRAN SP_Nivel1;
+
+-- Nivel 2
+SAVE TRAN SP_Nivel2;
+
+-- Si ocurre un error en nivel 2:
+ROLLBACK TRAN SP_Nivel2;   -- Vuelve al inicio del nivel 2
+
+COMMIT TRAN Principal;
+```
+
+Esto permite modelar procesos compuestos por varios pasos:
+
+1. Alta de cliente
+
+2. Alta de equipo
+
+3. Diagnóstico
+
+4. Reparación
+
+5. Factura
+
+6. Pago
+
+Si el error ocurre en el pago, no es necesario revertir cliente, equipo, diagnóstico ni reparación.
+
+**➡️ EJEMPLO 4 – Flujo completo con SAVEPOINT**
