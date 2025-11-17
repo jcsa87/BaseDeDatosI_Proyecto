@@ -8,7 +8,8 @@ Aplicado al Sistema de Servicio Técnico Informático
 
 Limitaciones
 
-* La instruccion `BACKUP` no se permite en una transacción explícita o implícita.
+* La instruccion `BACKUP` no se permite en una transacción explícita o implícita. Una transacción explícita es aquella en que se define explícitamente el inicio y el final de la transacción.
+
 * Las copias de seguridad creadas por versiones más recientes de SQL Server no se pueden restaurar en versiones anteriores de SQL Server
 
 Recomendaciones
@@ -40,3 +41,18 @@ Entre las opciones WITH se encuentran:
 * DESCRIPTION = { '*text*' | @*text_variable* }: Especifica el texto de forma libre que describe el conjunto de copia de seguridad.
 
 * NAME = { *backup_set_name* | @*backup_set_name_var* }. Especifica el nombre del conjunto de copia de seguridad. Si `NAME` no se especifica, está en blanco.
+
+
+## Copia de seguridad de un registro de transacciones.
+
+Limitaciones
+
+* No se admiten las copias de seguridad del registro de transacciones de la base de datos del sistema `master`.
+
+Ejemplos
+
+```SQL
+BACKUP LOG AdventureWorks2022
+   TO MyAdvWorks_FullRM_log1;
+GO
+```
