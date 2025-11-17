@@ -1,244 +1,134 @@
-## 📑 Índice
+📘 Introducción
 
-CAPÍTULO I: INTRODUCCIÓN
+Los procedimientos almacenados y las funciones definidas por el usuario (UDF) en SQL Server son bloques de código T-SQL precompilados que viven dentro de la base de datos. A través de ellos es posible:
 
-CAPÍTULO II: MARCO CONCEPTUAL
+- encapsular lógica de negocio
 
-CAPÍTULO III: METODOLOGÍA
+- automatizar tareas repetitivas
 
-CAPÍTULO IV: DESARROLLO
+- reducir errores
 
-Procedimientos aplicados al sistema
+- mejorar rendimiento
 
-Funciones aplicadas al sistema
+- reforzar la seguridad
 
-CAPÍTULO V: CONCLUSIONES
+- organizar procesos complejos
 
-CAPÍTULO VI: BIBLIOGRAFÍA
+En sistemas como un Servicio Técnico Informático, donde continuamente se registran ingresos de equipos, diagnósticos, reparaciones, repuestos y pagos, estas herramientas se vuelven esenciales para estandarizar procesos y mantener la consistencia.
 
-# CAPÍTULO I: INTRODUCCIÓN
-a. Tema
+⚙️ ¿Por qué son importantes?
 
-El presente trabajo aborda el estudio de los procedimientos almacenados y las funciones definidas por el usuario en SQL Server. Ambos constituyen herramientas esenciales para la automatización, seguridad y eficiencia en la gestión de datos dentro de sistemas informáticos.
+Una base de datos profesional no solo almacena información: también debe procesarla, validarla y mantenerla coherente. Aquí es donde procedimientos y funciones marcan una diferencia real.
 
-b. Definición o planteamiento del problema
+📌 Los procedimientos permiten realizar operaciones como:
 
-Los sistemas informáticos requieren procesos eficientes, confiables y seguros para el manejo de la información.
-En un Servicio Técnico Informático, donde numerosas operaciones se realizan diariamente, la ausencia de procedimientos y funciones genera:
+- registrar el ingreso de un equipo
 
-procesos manuales repetitivos
+- finalizar una reparación
 
-mayor probabilidad de errores
+- generar una factura
 
-pérdida de tiempo
+- aplicar un pago
 
-lógica de negocio dispersa
+- descontar stock de repuestos
 
-consultas duplicadas
+- registrar auditorías
 
-dificultades de mantenimiento
+📌 Las funciones permiten:
 
-El sistema debe ejecutar tareas como:
+- calcular valores
 
-registrar ingresos de equipos
+- aplicar filtros avanzados
 
-crear diagnósticos
+- generar tablas derivadas
 
-gestionar reparaciones
+- unificar lógica repetitiva
 
-asociar repuestos
+Ambas herramientas forman un puente entre los datos crudos y la lógica del negocio.
 
-emitir facturas
+🧠 Conceptos Fundamentales
+Procedimientos Almacenados (Stored Procedures)
 
-registrar pagos
+Un procedimiento almacenado es un bloque de instrucciones SQL que se guarda dentro del servidor y se ejecuta mediante:
 
-Esto conduce a varias preguntas fundamentales:
+EXEC NombreProcedimiento
 
-Interrogantes centrales
+⭐ Características principales
 
-¿Qué diferencias existen entre un procedimiento y una función dentro de SQL Server?
+- Código precompilado (más rápido)
 
-¿De qué manera contribuyen a mejorar la eficiencia y consistencia del sistema?
+- Manejo de transacciones: BEGIN TRAN
 
-¿Cómo afectan al rendimiento cuando la cantidad de datos crece significativamente?
+- Manejo de errores: TRY...CATCH
 
-¿Qué impacto tienen en la seguridad y el control de accesos?
+- Permiten modificar datos
 
-¿Qué riesgos existen al depender excesivamente de lógica almacenada en la base de datos?
+- Parámetros de entrada y salida
 
-¿Qué prácticas garantizan su eficiencia a largo plazo?
+- Permiten múltiples operaciones en cadena
 
-c. Objetivos
-Objetivo General
+⭐ Ventajas
 
-Analizar el uso, beneficios y limitaciones de los procedimientos y funciones almacenadas en SQL Server, aplicados al sistema de Servicio Técnico Informático.
+- Estandarizan procesos críticos
 
-Objetivos Específicos
+- Evitan duplicación de código
 
-Comprender las características principales de procedimientos y funciones.
+- Mejoran la seguridad
 
-Analizar sus diferencias y usos recomendados.
+- Reducen tráfico cliente-servidor
 
-Aplicarlos al caso del Servicio Técnico Informático.
+- Facilitan trazabilidad y auditoría
 
-Diseñar procedimientos para automatizar procesos concretos.
+  Funciones (User Defined Functions)
 
-Implementar funciones para cálculos y filtros reutilizables.
+Una función devuelve siempre un valor: escalar o tabla. Se utiliza dentro de una sentencia SQL como:
 
-Evaluar su impacto en rendimiento, seguridad y mantenibilidad.
+SELECT dbo.MiFuncion(…)
 
-Identificar riesgos y buenas prácticas asociadas a su uso.
+⭐ Tipos de funciones
 
-# CAPÍTULO II: MARCO CONCEPTUAL
+- Escalares → devuelven un valor simple
 
-Los procedimientos almacenados y las funciones definidas por el usuario son componentes programables del motor SQL que permiten encapsular lógica dentro de la base de datos, optimizando su uso y organización.
+- Inline Table-Valued → devuelven una tabla derivada
 
-## 1. Procedimientos Almacenados (Stored Procedures)
+- Multi-Statement TVF → permiten lógica más compleja interna
 
-Un procedimiento almacenado es un conjunto de instrucciones T-SQL precompiladas, guardadas en el servidor, diseñadas para automatizar tareas y ejecutar procesos complejos.
+⭐ Características
 
-1.1. Características
+- No pueden modificar datos
 
-Plan de ejecución precompilado y cacheado
+- No permiten TRY/CATCH
 
-Encapsulamiento de lógica empresarial
+- Son deterministas
 
-Permiten transacciones completas (BEGIN TRAN / COMMIT / ROLLBACK)
+Ideales para cálculos repetitivos o filtros reutilizables
 
-Manejo de errores con TRY/CATCH
-
-Pueden modificar datos: INSERT, UPDATE, DELETE
-
-Permiten parámetros de entrada y salida
-
-Pueden retornar uno o varios conjuntos de resultados
-
-1.2. Ventajas
-
-Mejoran el rendimiento en sistemas con alto volumen de consultas
-
-Reducen tráfico de red
-
-Centralizan la lógica del negocio
-
-Mejoran la seguridad al evitar acceso directo a las tablas
-
-Facilitan el mantenimiento del sistema
-
-Permiten modularidad y reutilización
-
-1.3. Limitaciones
-
-No pueden integrarse directamente en una consulta SELECT
-
-Excesiva lógica en la base puede dificultar el versionado
-
-Un mal diseño puede causar problemas de rendimiento (parameter sniffing)
-
-## 2. Funciones Definidas por el Usuario (User-Defined Functions, UDF)
-
-Una función es una rutina T-SQL que recibe parámetros y devuelve un valor escalar o una tabla.
-
-2.1. Características
-
-Uso dentro de SELECT, WHERE, JOIN, ORDER BY
-
-No pueden modificar datos permanentemente
-
-No permiten TRY/CATCH
-
-Lógicas deterministas y reutilizables
-
-Ideales para cálculos y filtros repetitivos
-
-2.2. Tipos de funciones
-
-Escalares → devuelven un solo valor
-
-Inline Table-Valued (iTVF) → más eficientes, tratadas como vistas parametrizadas
-
-Multi-Statement Table-Valued (mTVF) → permiten múltiples pasos internos
-
-2.3. Ventajas
-
-Facilitan la estandarización de cálculos
-
-Mejoran la legibilidad de consultas complejas
-
-Reducen duplicación de lógica
-
-Se integran fácilmente en cualquier consulta SQL
-
-2.4. Limitaciones
-
-No pueden usar transacciones
-
-No pueden ejecutar operaciones DML permanentes
-
-Las mTVF pueden afectar el rendimiento
-
-## 3. Comparación ampliada
-Aspecto	Procedimiento	Función
+⚙️ Diferencias Clave entre Procedimientos y Funciones
+Característica	Procedimiento	Función
+Retorno	Opcional	Obligatorio
+Uso en SELECT	❌ No	✔️ Sí
+Modificación de datos	✔️ Sí	❌ No
 Manejo de errores	✔️ TRY/CATCH	❌ No
 Transacciones	✔️ Sí	❌ No
-Modificación de datos	✔️ Sí	❌ No
-Uso en SELECT	❌ No	✔️ Sí
-Retorno	Opcional	Obligatorio
-Seguridad	Alta (control granular)	Media
-Escenarios ideales	Procesos complejos	Cálculos y filtros
-## 4. Importancia práctica
+Uso ideal	Procesos complejos	Cálculos y filtros
+🔎 Preguntas que guían la investigación
 
-Procedimientos y funciones son esenciales para:
+Para comprender el impacto real de estas herramientas, surgen preguntas fundamentales:
 
-Automatizar tareas recurrentes
+❓ ¿Cómo afectan al rendimiento cuando los datos crecen?
+❓ ¿Qué rol cumplen en la seguridad del sistema?
+❓ ¿Cuándo conviene usar un procedimiento y cuándo una función?
+❓ ¿Qué riesgos existen si se abusa de lógica almacenada?
+❓ ¿Cómo mantenerlos eficientes a largo plazo?
+🔧 Aplicación al Sistema de Servicio Técnico Informático
 
-Garantizar integridad y consistencia
+A continuación se muestran ejemplos reales basados en tu base de datos.
 
-Aumentar seguridad
+🔧 Procedimientos Almacenados — Ejemplos Reales
+📌 Registrar Ingreso de Equipo
 
-Reducir tiempos de respuesta
+(Automatiza la creación del registro de ingreso, evitando duplicación de lógica)
 
-Evitar duplicación de código
-
-Facilitar escalabilidad
-
-Asegurar mantenibilidad a largo plazo
-
-En sistemas reales como el Servicio Técnico Informático cumplen un rol crítico al organizar procesos como ingresos, reparaciones, pagos y reportes internos.
-
-# CAPÍTULO III: METODOLOGÍA
-a. Descripción del proceso
-
-La investigación se desarrolló mediante:
-
-revisión bibliográfica
-
-análisis de la base de datos del Servicio Técnico
-
-diseño de ejemplos reales
-
-ejecución de pruebas en SQL Server
-
-comparación entre consultas tradicionales vs. procedimientos/funciones
-
-evaluación de rendimiento
-
-b. Herramientas utilizadas
-
-SQL Server Management Studio
-
-Documentación oficial de Microsoft
-
-Libros académicos de bases de datos
-
-Diagramas y scripts del Servicio Técnico
-
-# CAPÍTULO IV: DESARROLLO
-
-A continuación se presentan ejemplos prácticos aplicados al sistema.
-
-## Procedimientos aplicados al sistema
-### 🔧 1. Registrar Ingreso de Equipo
 CREATE PROCEDURE RegistrarIngresoEquipo
     @id_cliente INT,
     @id_equipo INT,
@@ -254,12 +144,13 @@ BEGIN
 
     INSERT INTO ingreso_equipo (id_ingreso_equipo, falla, id_cliente, id_equipo)
     VALUES (@nuevoIngresoID, @falla, @id_cliente, @id_equipo);
-
-    SELECT 'Ingreso registrado correctamente' AS Resultado;
 END;
 GO
 
-### 🔧 2. Finalizar Reparación y Registrar Pago
+📌 Finalizar Reparación (actualiza estado + factura + pago)
+
+(Control transaccional completo: si algo falla, se revierte todo)
+
 CREATE PROCEDURE FinalizarReparacion
     @id_reparacion INT,
     @monto DECIMAL(10,2),
@@ -291,7 +182,6 @@ BEGIN
         VALUES (@id_medio_pago, @facturaID, @monto, @id_reparacion);
 
         COMMIT;
-        SELECT 'Reparación finalizada y factura generada' AS Resultado;
     END TRY
     BEGIN CATCH
         ROLLBACK;
@@ -300,8 +190,11 @@ BEGIN
 END;
 GO
 
-## Funciones aplicadas al sistema
-### 📘 1. Total gastado por cliente
+📘 Funciones — Ejemplos Reales
+📌 Total gastado por cliente
+
+(Ideal para reportes y cálculos en dashboards o listados)
+
 CREATE FUNCTION fn_TotalGastadoCliente(@id_cliente INT)
 RETURNS DECIMAL(10,2)
 AS
@@ -315,46 +208,58 @@ BEGIN
 END;
 GO
 
-### 📘 2. Reparaciones por estado
-CREATE FUNCTION fn_ReparacionesPorEstado(@id_estado INT)
+📌 Lista de reparaciones por estado
+
+(Útil para tableros de gestión o reportes internos)
+
+CREATE FUNCTION fn_ReparacionesPorEstado(@estado INT)
 RETURNS TABLE
 AS
-RETURN
-(
-    SELECT r.id_reparacion, r.fecha_resolucion, r.monto_total
-    FROM reparacion r
-    WHERE r.id_estado_reparacion = @id_estado
+RETURN (
+    SELECT *
+    FROM reparacion
+    WHERE id_estado_reparacion = @estado
 );
-GO
 
-# CAPÍTULO V: CONCLUSIONES
+🔐 Buenas Prácticas
 
-Los procedimientos y funciones almacenadas cumplen un papel fundamental dentro del diseño de bases de datos modernas, especialmente en sistemas con alta carga operativa como un Servicio Técnico Informático.
+- Usar nombres descriptivos:
+sp_RegistrarIngreso, fn_TotalReparaciones
 
-Su uso permite:
+- Validar parámetros de entrada
 
-automatizar procesos críticos
+- Evitar lógica innecesaria en funciones
 
-mejorar el rendimiento
+- Manejar transacciones en procedimientos críticos
 
-reforzar la seguridad
+- Documentar cada procedimiento/función
 
-reducir errores humanos
+🧾 Conclusión
 
-centralizar lógica
+Los procedimientos y funciones almacenadas son herramientas esenciales para construir sistemas robustos. Dentro del Servicio Técnico Informático permiten:
 
-facilitar la escalabilidad del sistema
+- automatizar tareas clave
 
-La evidencia muestra que integrar estas herramientas desde el inicio favorece un desarrollo más sólido, sustentable y profesional.
+- reducir errores
 
-# CAPÍTULO VI: BIBLIOGRAFÍA
+- organizar la lógica del negocio
 
-Microsoft Docs — CREATE PROCEDURE (Transact-SQL)
+- reforzar la seguridad
 
-Microsoft Docs — CREATE FUNCTION (Transact-SQL)
+- mejorar la eficiencia
 
-SQLShack — Calbimonte, D.
+- facilitar la escalabilidad
 
-Elmasri & Navathe — Fundamentals of Database Systems
+Su correcta implementación garantiza un sistema profesional, mantenible y eficiente.
 
-Coronel — Database Systems
+📚 Referencias
+
+Microsoft Docs – CREATE PROCEDURE
+
+Microsoft Docs – CREATE FUNCTION
+
+SQLShack – Calbimonte
+
+Elmasri & Navathe – Database Systems
+
+Coronel – Database Design and Implementation
