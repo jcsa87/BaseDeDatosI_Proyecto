@@ -1,1 +1,258 @@
+CAPÍTULO I: INTRODUCCIÓN
+a. Tema
 
+Este trabajo tiene como tema central el estudio de los procedimientos almacenados y las funciones definidas por el usuario en SQL Server, herramientas esenciales para la automatización, optimización y estructuración de la lógica de negocio en sistemas de bases de datos.
+
+b. Definición o planteamiento del problema
+
+Los sistemas modernos requieren consistencia, eficiencia y seguridad en el manejo de datos. En particular, un Servicio Técnico Informático involucra procesos repetitivos como:
+
+Registrar ingresos de equipos.
+
+Crear diagnósticos y reparaciones.
+
+Asociar repuestos.
+
+Emitir facturas.
+
+Registrar pagos.
+
+Sin procedimientos y funciones, estas tareas se realizan de forma manual o mediante consultas repetidas, generando errores, pérdida de tiempo y falta de integridad.
+
+Surgen entonces las preguntas centrales:
+
+¿Qué diferencias existen entre un procedimiento y una función?
+
+¿Qué aporta cada uno al sistema?
+
+¿Cómo aplicarlos dentro del Servicio Técnico Informático para agilizar tareas esenciales?
+
+c. Objetivo del Trabajo Práctico
+
+Analizar y aplicar el uso de procedimientos y funciones en SQL Server, demostrando cómo estos optimizan los procesos operativos del sistema de Servicio Técnico Informático.
+
+i. Objetivo general
+
+Comprender el funcionamiento, utilidad y aplicación práctica de procedimientos y funciones almacenadas, integrándolas en tareas reales del sistema de Servicio Técnico Informático.
+
+ii. Objetivos específicos
+
+Explicar el funcionamiento de procedimientos almacenados y funciones.
+
+Comparar ambos objetos según sus características técnicas.
+
+Aplicar estos objetos al sistema de Servicio Técnico Informático.
+
+Diseñar procedimientos para automatizar tareas del negocio.
+
+Crear funciones para obtener cálculos y consultas frecuentes.
+
+Evaluar cómo estos objetos mejoran rendimiento, control y seguridad.
+
+CAPÍTULO II: MARCO CONCEPTUAL O REFERENCIAL
+
+Los procedimientos almacenados y funciones son bloques programables en SQL Server que extienden la capacidad de la base de datos.
+
+Procedimientos Almacenados
+
+Son conjuntos de instrucciones SQL precompilados que permiten:
+
+Realizar operaciones DML (INSERT, UPDATE, DELETE).
+
+Ejecutar transacciones completas.
+
+Controlar errores mediante TRY…CATCH.
+
+Encapsular lógica compleja.
+
+En un Servicio Técnico Informático permiten automatizar procesos como:
+
+Registrar el ingreso de un equipo.
+
+Finalizar una reparación.
+
+Actualizar stock.
+
+Generar facturas y pagos.
+
+Funciones Definidas por el Usuario (UDF)
+
+Devuelven un único valor (funciones escalares) o una tabla (table-valued). No permiten modificar datos y se pueden usar directamente dentro de:
+
+SELECT
+
+WHERE
+
+JOIN
+
+Son ideales para:
+
+Cálculos determinísticos.
+
+Filtros reutilizables.
+
+Consultas derivadas.
+
+Aplicaciones en el Servicio Técnico:
+
+Total gastado por cliente.
+
+Repuestos utilizados en una reparación.
+
+Reparaciones por estado.
+
+Cálculo del costo total acumulado.
+
+Diferencias clave
+Característica	Procedimiento	Función
+Retorno	Cero o varios	Un valor/tabla
+Uso en SELECT	❌ No	✔️ Sí
+Modificación de datos	✔️ Sí	❌ No
+Manejo de transacciones	✔️ Sí	❌ No
+Uso recomendado	Procesos complejos	Cálculos puros
+CAPÍTULO III: METODOLOGÍA SEGUIDA
+a. Descripción de cómo se realizó el Trabajo Práctico
+
+Se realizó una investigación basada en:
+
+Documentación oficial de Microsoft.
+
+Libros académicos especializados.
+
+Análisis del sistema real de Servicio Técnico Informático.
+
+Pruebas ejecutadas en SQL Server Management Studio.
+
+b. Herramientas utilizadas
+
+SQL Server Management Studio (SSMS)
+
+Microsoft Docs
+
+Sistema de Servicio Técnico Informático (base de datos proporcionada)
+
+Modelos de base de datos relacionales
+
+CAPÍTULO IV: DESARROLLO DEL TEMA / PRESENTACIÓN DE RESULTADOS
+
+Aquí se presentan los conceptos aplicados al sistema real y los scripts desarrollados.
+
+# Ejemplos Aplicados al Servicio Técnico Informático
+## 🔧 PROCEDIMIENTO 1 — Registrar Ingreso de Equipo
+
+Este procedimiento automatiza el registro de ingresos en la tabla ingreso_equipo.
+
+CREATE PROCEDURE RegistrarIngresoEquipo
+    @id_cliente INT,
+    @id_equipo INT,
+    @falla VARCHAR(255)
+AS
+BEGIN
+    DECLARE @nuevoIngresoID INT;
+
+    SELECT @nuevoIngresoID = ISNULL(MAX(id_ingreso_equipo), 0) + 1
+    FROM ingreso_equipo
+    WHERE id_cliente = @id_cliente AND id_equipo = @id_equipo;
+
+    INSERT INTO ingreso_equipo (id_ingreso_equipo, falla, id_cliente, id_equipo)
+    VALUES (@nuevoIngresoID, @falla, @id_cliente, @id_equipo);
+
+    SELECT 'Ingreso registrado correctamente' AS Resultado;
+END;
+GO
+
+## 🔧 PROCEDIMIENTO 2 — Finalizar Reparación, Facturar y Registrar Pago
+
+Encapsula 3 procesos:
+✔ Finalización de reparación
+✔ Generación de factura
+✔ Registro del pago
+
+CREATE PROCEDURE FinalizarReparacion
+    @id_reparacion INT,
+    @monto DECIMAL(10,2),
+    @id_medio_pago INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        UPDATE reparacion
+        SET fecha_resolucion = GETDATE(),
+            monto_total = @monto,
+            id_estado_reparacion = 3
+        WHERE id_reparacion = @id_reparacion;
+
+        DECLARE @cliente INT;
+
+        SELECT @cliente = c.id_cliente
+        FROM reparacion r
+        JOIN diagnostico d ON r.id_diagnostico = d.id_diagnostico
+        JOIN equipo e ON d.id_equipo = e.id_equipo
+        JOIN cliente c ON c.id_cliente = e.id_cliente
+        WHERE r.id_reparacion = @id_reparacion;
+
+        INSERT INTO factura (id_cliente) VALUES (@cliente);
+
+        DECLARE @facturaID INT = SCOPE_IDENTITY();
+
+        INSERT INTO pago (id_medio_de_pago, id_factura, monto, id_reparacion)
+        VALUES (@id_medio_pago, @facturaID, @monto, @id_reparacion);
+
+        COMMIT;
+        SELECT 'Reparación finalizada y factura generada' AS Resultado;
+
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        THROW;
+    END CATCH
+END;
+GO
+
+# 🔧 FUNCIONES APLICADAS AL SISTEMA
+## 📘 FUNCIÓN 1 — Total Gastado por un Cliente
+CREATE FUNCTION fn_TotalGastadoCliente(@id_cliente INT)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN (
+        SELECT ISNULL(SUM(p.monto),0)
+        FROM pago p
+        JOIN factura f ON f.id_factura = p.id_factura
+        WHERE f.id_cliente = @id_cliente
+    );
+END;
+GO
+
+## 📘 FUNCIÓN 2 — Reparaciones por Estado
+CREATE FUNCTION fn_ReparacionesPorEstado(@id_estado INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT r.id_reparacion, r.fecha_resolucion, r.monto_total
+    FROM reparacion r
+    WHERE r.id_estado_reparacion = @id_estado
+);
+GO
+
+CAPÍTULO V: CONCLUSIONES
+
+Los procedimientos y funciones almacenadas demostraron ser herramientas clave para mejorar la eficiencia, seguridad y mantenibilidad del sistema de Servicio Técnico Informático.
+
+Los procedimientos permitieron automatizar tareas críticas como registrar ingresos, finalizar reparaciones y generar facturas. Las funciones, por su parte, ofrecen cálculos reutilizables y consultas consistentes, útiles para análisis y reportes.
+
+Ambos objetos, utilizados en conjunto, fortalecen la estructura lógica del sistema y permiten escalarlo de manera segura y ordenada.
+
+VI. BIBLIOGRAFÍA
+
+Microsoft Docs: CREATE PROCEDURE (Transact-SQL)
+
+Microsoft Docs: CREATE FUNCTION (Transact-SQL)
+
+SQLShack (Calbimonte, 2019)
+
+Coronel, C. — Database Systems: Design, Implementation, and Management
+
+Elmasri & Navathe — Fundamentals of Database Systems
