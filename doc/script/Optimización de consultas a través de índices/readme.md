@@ -64,7 +64,7 @@ La siguiente tabla compara los resultados de las tres pruebas ejecutadas.
 * **Impacto:** El costo de E/S colapsó. Pasamos de 3,248 lecturas lógicas a 55. Esto significa una reducción del 98.3% en el trabajo de E/S. El tiempo de CPU bajó a 0 ms.
 
 ### Prueba 3: Con Índice Agrupado Compuesto (La Optimización)
-* **Plan:** `Clustered Index Seek` (Búsqueda en índice clúster).
+* **Plan:** Clustered Index Seek (Búsqueda en índice clúster).
 * **Análisis:** Se creó un índice sobre las columnas fecha_emision, id_cliente, id_factura. Los resultados fueron casi idénticos a la Prueba 2 (55 lecturas lógicas).
 * **Conclusión:** Para esta consulta específica, la ganancia de rendimiento ya se había obtenido en la Prueba 2, porque la cláusula WHERE solo usaba la primera columna del índice (fecha_emision).
 
