@@ -19,8 +19,8 @@ En SQL por defecto se realizan "en línea", es decir que no necesitas
 detener la base de datos ni desconectar a los usuarios.
 
 
-Lo realizamos sin la fecha ni el dia, a pesar de que sea lo conveniente
-porque la consigna así lo pide.
+Lo realizamos sin la fecha ni el dia, porque es un backup completo que se tomará
+como base para luego aplicar los backups de log.
 */
 
 BACKUP DATABASE servicio_tecnico_informatico
