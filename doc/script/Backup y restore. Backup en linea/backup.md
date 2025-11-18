@@ -56,3 +56,32 @@ BACKUP LOG AdventureWorks2022
    TO MyAdvWorks_FullRM_log1;
 GO
 ```
+
+## Restore
+
+# Escenarios de restauración
+SQL Server admite una serie de escenarios de restauración, las utilizadas para la realización del trabajo fueron las siguientes:
+
+* Restauración de la base de datos completa
+
+Restaura la base de datos completa, empezando por una copia de seguridad completa de la base de datos, que puede ir seguida de una restauración de una copia de seguridad diferencial de la base de datos (y copias de seguridad de registros). 
+
+* Restauración de archivos
+
+Restaura un archivo o un grupo de archivos en una base de datos de varios grupos de archivos. En el modelo de recuperación simple, el archivo debe pertenecer a un grupo de archivos de solo lectura. Después de una restauración de archivos completa, se puede restaurar una copia de seguridad de archivos diferencial.
+
+* Restauración por etapas
+
+Restaura la base de datos por etapas, empezando por el grupo de archivos principal y uno o más grupos de archivos secundarios. Una restauración por etapas empieza por RESTORE DATABASE y la especificación de uno o más grupos de archivos secundarios que se van a restaurar.
+
+
+* Restauración del registro de transacciones.
+
+Con el modelo de recuperación completa o el modelo de recuperación optimizado para cargas masivas de registros, es necesaria la restauración de copias de seguridad de registros para alcanzar el punto de recuperación deseado.
+
+Otro punto importante fue la opción [RECOVERY | NORECOVERY]:
+
+*`NORECOVERY` especifica que la reversión no se produce. Esto permite la puesta al día para continuar con la siguiente instrucción de la secuencia.
+En este caso, la secuencia de restauración puede restaurar otras copias de seguridad y ponerlas al día.
+
+*`RECOVERY` (predeterminado) indica que se debe realizar la reversión una vez completada la puesta al día para la copia de seguridad actual. No se pueden restaurar más copias de seguridad. Esta opción debe ser seleccionada una vez que haya restaurado todas las copias de seguridad necesarias.
