@@ -123,3 +123,34 @@ Esto permite modelar procesos compuestos por varios pasos:
 Si el error ocurre en el pago, no es necesario revertir cliente, equipo, diagnóstico ni reparación.
 
 **➡️ EJEMPLO 4 – Flujo completo con SAVEPOINT**
+
+---
+
+### 5. Buenas Prácticas para el Manejo de Transacciones
+
+El uso incorrecto de transacciones puede bloquear el sistema y afectar el rendimiento. Para evitarlo, se recomienda:
+
+1.  **Mantenerlas cortas:** Una transacción debe durar lo mínimo indispensable. No se debe pedir input al usuario (ej: esperar que llene un formulario) con una transacción abierta.
+2.  **Acceder a objetos en el mismo orden:** Para evitar _Deadlocks_, si dos procesos tocan la tabla `Cliente` y `Equipo`, ambos deberían hacerlo en el mismo orden (primero `Cliente`, luego `Equipo`).
+3.  **Usar `TRY...CATCH` siempre:** Nunca dejar un `BEGIN TRAN` sin su correspondiente manejo de errores.
+
+---
+
+### 6. Problemas de Concurrencia: Deadlocks
+
+Un efecto secundario del uso de transacciones y bloqueos es el **Deadlock**.
+
+Ocurre cuando dos transacciones se bloquean mutuamente:
+
+1.  **Transacción A** tiene bloqueada la tabla `Cliente` y necesita acceder a `Equipo`.
+2.  **Transacción B** tiene bloqueada la tabla `Equipo` y necesita acceder a `Cliente`.
+
+Ninguna puede avanzar porque esperan a la otra. SQL Server detecta esto automáticamente, elige una "víctima" (generalmente la que hizo menos trabajo), le hace `ROLLBACK` forzado y devuelve un error (Error 1205), permitiendo que la otra termine.
+
+**En nuestro sistema:** Podría ocurrir si un Recepcionista intenta borrar un Cliente mientras un Técnico intenta agregarle un Equipo al mismo tiempo.
+
+---
+
+## 7. Conclusión
+
+La implementación de transacciones en el Sistema de Servicio Técnico no es opcional, sino crítica. Garantiza que procesos complejos en nuestro caso práctico la facturación y el control de stock mantengan la integridad de los datos (ACID). Aunque SQL Server no soporta anidamiento real, el uso estratégico de `SAVEPOINT` y el manejo de errores con `TRY...CATCH` nos permite construir flujos de trabajo robustos y profesionales.
