@@ -59,9 +59,8 @@ BEGIN CATCH
 END CATCH;
 ```
 
-**➡️ EJEMPLO 1 (alta de cliente y equipo con COMMIT)**
+**➡️ (Ver demostración en script: EJEMPLO 1 y EJEMPLO 2)**
 
-**➡️ EJEMPLO 2 (error de integridad y ROLLBACK automático)**
 
 ---
 
