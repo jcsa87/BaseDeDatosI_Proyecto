@@ -1,12 +1,15 @@
 # Investigación: Manejo de Transacciones y Anidamiento en T-SQL
 
-Aplicado al Sistema de Servicio Técnico Informático
+**Proyecto**: Sistema de Gestión para Servicio Técnico Informático 
+**Materia**: Base de Datos I
 
 ---
 
 ## 1. La Transacción y las Propiedades ACID
 
-Una **transacción** es una secuencia de operaciones T-SQL que se ejecutan como una única unidad de trabajo lógica. Su objetivo es garantizar que los datos permanezcan correctos, coherentes y seguros ante fallos lógicos o técnicos.
+Una **transacción** es una secuencia de operaciones T-SQL que se ejecutan como una única unidad de trabajo lógica. Su objetivo es garantizar que los datos permanezcan correctos, coherentes y seguros ante fallos lógicos o técnicos. Se define como una unidad lógica de trabajo compuesta por una o más operaciones de manipulación de datos (**INSERT**, **UPDATE**, **DELETE**).
+
+El objetivo fundamental de las transacciones es asegurar la integridad de la base de datos frente a errores del sistema, fallos de hardware o interrupciones en la lógica de negocio. Una transacción asegura que un proceso complejo (como una reparación que consume stock y genera facturación) no quede en un estado intermedio o inconsistente.
 
 Para que un SGBD (Sistema Gestor de Base de Datos) sea considerado confiable, debe garantizar las propiedades **ACID**:
 
@@ -22,18 +25,22 @@ La transacción lleva a la base de datos de un estado válido a otro válido, pr
 ### • [I] Aislamiento
 
 Los efectos intermedios de una transacción no deben ser visibles para otras hasta que se confirme con `COMMIT`.
+ Determina cómo las transacciones concurrentes (usuarios simultáneos) ven los cambios de los demás.
 
 ### • [D] Durabilidad
 
 Una vez hecha la confirmación (`COMMIT`), los cambios quedan guardados incluso ante fallas del sistema.  
-Esto lo garantiza el **Transaction Log**.
+Esto lo garantiza el **Transaction Log**. Los cambios son permanentes y persistirán incluso ante una falla 
+catastrófica (como un corte de luz).
 
 ---
 
 ## 2. Manejo de Errores con TRY...CATCH
 
 En T-SQL, la forma más robusta de manejar errores dentro de una transacción es mediante bloques `TRY...CATCH`.
+ Esto permite capturar errores en tiempo de ejecución y tomar decisiones lógicas (como revertir cambios) sin detener abruptamente la aplicación.
 
+**Estructura Recomendada**
 ```sql
 BEGIN TRY
     BEGIN TRANSACTION;
@@ -52,9 +59,8 @@ BEGIN CATCH
 END CATCH;
 ```
 
-**➡️ EJEMPLO 1 (alta de cliente y equipo con COMMIT)**
+**➡️ (Ver demostración en script: EJEMPLO 1 y EJEMPLO 2)**
 
-**➡️ EJEMPLO 2 (error de integridad y ROLLBACK automático)**
 
 ---
 
@@ -63,7 +69,10 @@ END CATCH;
 Las transacciones no siempre necesitan revertirse por completo.
 En procesos reales, solo una parte puede fallar, mientras el resto sigue siendo válido.
 
-Para esto existe el comando `SAVE TRAN` (SAVEPOINT):
+Un `SAVEPOINT` actúa como un marcador en el hilo de la transacción.
+
+Para lograr una reversión parcial (revertir solo el último paso pero mantener los anteriores) 
+utilizamos el comando `SAVE TRAN` (SAVEPOINT):
 
 ```sql
 BEGIN TRAN;
