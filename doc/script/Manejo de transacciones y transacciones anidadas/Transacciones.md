@@ -69,7 +69,10 @@ END CATCH;
 Las transacciones no siempre necesitan revertirse por completo.
 En procesos reales, solo una parte puede fallar, mientras el resto sigue siendo válido.
 
-Para esto existe el comando `SAVE TRAN` (SAVEPOINT):
+Un `SAVEPOINT` actúa como un marcador en el hilo de la transacción.
+
+Para lograr una reversión parcial (revertir solo el último paso pero mantener los anteriores) 
+utilizamos el comando `SAVE TRAN` (SAVEPOINT):
 
 ```sql
 BEGIN TRAN;
