@@ -25,18 +25,22 @@ La transacción lleva a la base de datos de un estado válido a otro válido, pr
 ### • [I] Aislamiento
 
 Los efectos intermedios de una transacción no deben ser visibles para otras hasta que se confirme con `COMMIT`.
+ Determina cómo las transacciones concurrentes (usuarios simultáneos) ven los cambios de los demás.
 
 ### • [D] Durabilidad
 
 Una vez hecha la confirmación (`COMMIT`), los cambios quedan guardados incluso ante fallas del sistema.  
-Esto lo garantiza el **Transaction Log**.
+Esto lo garantiza el **Transaction Log**. Los cambios son permanentes y persistirán incluso ante una falla 
+catastrófica (como un corte de luz).
 
 ---
 
 ## 2. Manejo de Errores con TRY...CATCH
 
 En T-SQL, la forma más robusta de manejar errores dentro de una transacción es mediante bloques `TRY...CATCH`.
+ Esto permite capturar errores en tiempo de ejecución y tomar decisiones lógicas (como revertir cambios) sin detener abruptamente la aplicación.
 
+**Estructura Recomendada**
 ```sql
 BEGIN TRY
     BEGIN TRANSACTION;
