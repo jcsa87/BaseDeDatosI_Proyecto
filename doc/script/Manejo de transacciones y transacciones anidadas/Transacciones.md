@@ -163,3 +163,5 @@ Ninguna puede avanzar porque esperan a la otra. SQL Server detecta esto automát
 ## 7. Conclusión
 
 La implementación de transacciones en el Sistema de Servicio Técnico no es opcional, sino crítica. Garantiza que procesos complejos en nuestro caso práctico la facturación y el control de stock mantengan la integridad de los datos (ACID). Aunque SQL Server no soporta anidamiento real, el uso estratégico de `SAVEPOINT` y el manejo de errores con `TRY...CATCH` nos permite construir flujos de trabajo robustos y profesionales.
+ La implementación de **`SAVE TRANSACTION` (Savepoints)** resultó ser la solución técnica adecuada. Esto faculta al sistema para preservar pasos exitosos (como un diagnóstico médico válido) mientras se rechazan y corrigen pasos finales erróneos (como una falla en el pago), optimizando la experiencia operativa.
+  Para flujos de negocio complejos (como el ciclo *Cliente -> Equipo -> Diagnóstico -> Reparación*), el uso de transacciones estándar es insuficiente si se busca flexibilidad.
