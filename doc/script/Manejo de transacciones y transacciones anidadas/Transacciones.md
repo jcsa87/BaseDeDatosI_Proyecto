@@ -1,12 +1,15 @@
 # Investigación: Manejo de Transacciones y Anidamiento en T-SQL
 
-Aplicado al Sistema de Servicio Técnico Informático
+**Proyecto**: Sistema de Gestión para Servicio Técnico Informático 
+**Materia**: Base de Datos I
 
 ---
 
 ## 1. La Transacción y las Propiedades ACID
 
-Una **transacción** es una secuencia de operaciones T-SQL que se ejecutan como una única unidad de trabajo lógica. Su objetivo es garantizar que los datos permanezcan correctos, coherentes y seguros ante fallos lógicos o técnicos.
+Una **transacción** es una secuencia de operaciones T-SQL que se ejecutan como una única unidad de trabajo lógica. Su objetivo es garantizar que los datos permanezcan correctos, coherentes y seguros ante fallos lógicos o técnicos. Se define como una unidad lógica de trabajo compuesta por una o más operaciones de manipulación de datos (**INSERT**, **UPDATE**, **DELETE**).
+
+El objetivo fundamental de las transacciones es asegurar la integridad de la base de datos frente a errores del sistema, fallos de hardware o interrupciones en la lógica de negocio. Una transacción asegura que un proceso complejo (como una reparación que consume stock y genera facturación) no quede en un estado intermedio o inconsistente.
 
 Para que un SGBD (Sistema Gestor de Base de Datos) sea considerado confiable, debe garantizar las propiedades **ACID**:
 
